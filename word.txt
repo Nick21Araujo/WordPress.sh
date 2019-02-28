@@ -4,129 +4,129 @@
 # Facebook: facebook.com/ProcedimentosEmTI
 # Facebook: facebook.com/BoraParaPratica
 # YouTube: youtube.com/BoraParaPratica
-# Data de criaÁ„o: 09/11/2018
-# Data de atualizaÁ„o: 10/02/2019
-# Vers„o: 0.05
-# Testado e homologado para a vers„o do Ubuntu Server 18.04.x LTS x64
+# Data de cria√ß√£o: 09/11/2018
+# Data de atualiza√ß√£o: 10/02/2019
+# Vers√£o: 0.05
+# Testado e homologado para a vers√£o do Ubuntu Server 18.04.x LTS x64
 # Kernel >= 4.15.x
 #
-# Wordpress: È um sistema livre e aberto de gest„o de conte˙do para internet (do inglÍs: Content Management System - CMS),
-# baseado em PHP com banco de dados MySQL, executado em um servidor interpretador, voltado principalmente para a criaÁ„o de
-# p·ginas eletrÙnicas (sites) e blogs online. Criado a partir do extinto b2/cafelog, por Ryan Boren e Matthew Mullenweg, e
-# distribuÌdo gratuitamente sob a GNU General Public License.
+# Wordpress: √© um sistema livre e aberto de gest√£o de conte√∫do para internet (do ingl√™s: Content Management System - CMS),
+# baseado em PHP com banco de dados MySQL, executado em um servidor interpretador, voltado principalmente para a cria√ß√£o de
+# p√°ginas eletr√¥nicas (sites) e blogs online. Criado a partir do extinto b2/cafelog, por Ryan Boren e Matthew Mullenweg, e
+# distribu√≠do gratuitamente sob a GNU General Public License.
 #
 # Site oficial: https://wordpress.org/
 #
-# VÌdeo de instalaÁ„o do GNU/Linux Ubuntu Server 18.04.x LTS: https://www.youtube.com/watch?v=zDdCrqNhIXI
-# VÌdeo de instalaÁ„o do LAMP Server no Ubuntu Server 18.04.x LTS: https://www.youtube.com/watch?v=6EFUu-I3u4s
+# V√≠deo de instala√ß√£o do GNU/Linux Ubuntu Server 18.04.x LTS: https://www.youtube.com/watch?v=zDdCrqNhIXI
+# V√≠deo de instala√ß√£o do LAMP Server no Ubuntu Server 18.04.x LTS: https://www.youtube.com/watch?v=6EFUu-I3u4s
 #
-# Vari·vel da Data Inicial para calcular o tempo de execuÁ„o do script (VARI¡VEL MELHORADA)
-# opÁ„o do comando date: +%T (Time)
+# Vari√°vel da Data Inicial para calcular o tempo de execu√ß√£o do script (VARI√ÅVEL MELHORADA)
+# op√ß√£o do comando date: +%T (Time)
 HORAINICIAL=`date +%T`
 #
-# Vari·veis para validar o ambiente, verificando se o usu·rio e "root", vers„o do ubuntu e kernel
-# opÁıes do comando id: -u (user), opÁıes do comando: lsb_release: -r (release), -s (short), 
-# opÁıes do comando uname: -r (kernel release), opÁıes do comando cut: -d (delimiter), -f (fields)
-# opÁ„o do caracter: | (piper) Conecta a saÌda padr„o com a entrada padr„o de outro comando
-# opÁ„o do shell script: acento crase ` ` = Executa comandos numa subshell, retornando o resultado
-# opÁ„o do shell script: aspas simples ' ' = Protege uma string completamente (nenhum caractere È especial)
-# opÁ„o do shell script: aspas duplas " " = Protege uma string, mas reconhece $, \ e ` como especiais
+# Vari√°veis para validar o ambiente, verificando se o usu√°rio e "root", vers√£o do ubuntu e kernel
+# op√ß√µes do comando id: -u (user), op√ß√µes do comando: lsb_release: -r (release), -s (short), 
+# op√ß√µes do comando uname: -r (kernel release), op√ß√µes do comando cut: -d (delimiter), -f (fields)
+# op√ß√£o do caracter: | (piper) Conecta a sa√≠da padr√£o com a entrada padr√£o de outro comando
+# op√ß√£o do shell script: acento crase ` ` = Executa comandos numa subshell, retornando o resultado
+# op√ß√£o do shell script: aspas simples ' ' = Protege uma string completamente (nenhum caractere √© especial)
+# op√ß√£o do shell script: aspas duplas " " = Protege uma string, mas reconhece $, \ e ` como especiais
 USUARIO=`id -u`
 UBUNTU=`lsb_release -rs`
 KERNEL=`uname -r | cut -d'.' -f1,2`
 #
-# Vari·vel do caminho do Log dos Script utilizado nesse curso (VARI¡VEL MELHORADA)
-# opÁıes do comando cut: -d (delimiter), -f (fields)
-# $0 (vari·vel de ambiente do nome do comando)
+# Vari√°vel do caminho do Log dos Script utilizado nesse curso (VARI√ÅVEL MELHORADA)
+# op√ß√µes do comando cut: -d (delimiter), -f (fields)
+# $0 (vari√°vel de ambiente do nome do comando)
 LOG="/var/log/$(echo $0 | cut -d'/' -f2)"
 #
 # Declarando as variaveis para o download do Wordpress
 WORDPRESS="https://wordpress.org/latest.zip"
 #
-# Declarando as variaveis para criaÁ„o da Base de Dados do Wordpress
+# Declarando as variaveis para cria√ß√£o da Base de Dados do Wordpress
 USER="root"
-PASSWORD="pti@2018"
-# opÁ„o do comando create: create (criaÁ„o), database (base de dados), base (banco de dados)
-# opÁ„o do comando create: create (criaÁ„o), user (usu·rio), identified by (indentificado por - senha do usu·rio), password (senha)
-# opÁ„o do comando grant: grant (permiss„o), usage (uso em | uso na), *.* (todos os bancos/tabelas), to (para), user (us·rio)
-# identified by (indentificado por - senha do usu·rio), password (senha)
-# opıes do comando GRANT: grant (permiss„o), all (todos privilegios), on (em ou na | banco ou tabela), *.* (todos os bancos/tabelas)
-# to (para), user@'%' (usu·rio @ localhost), identified by (indentificado por - senha do usu·rio), password (senha)
-# opÁ„o do comando FLUSH: flush (atualizar), privileges (recarregar as permissıes)
+PASSWORD="123@senac"
+# op√ß√£o do comando create: create (cria√ß√£o), database (base de dados), base (banco de dados)
+# op√ß√£o do comando create: create (cria√ß√£o), user (usu√°rio), identified by (indentificado por - senha do usu√°rio), password (senha)
+# op√ß√£o do comando grant: grant (permiss√£o), usage (uso em | uso na), *.* (todos os bancos/tabelas), to (para), user (us√°rio)
+# identified by (indentificado por - senha do usu√°rio), password (senha)
+# op√µes do comando GRANT: grant (permiss√£o), all (todos privilegios), on (em ou na | banco ou tabela), *.* (todos os bancos/tabelas)
+# to (para), user@'%' (usu√°rio @ localhost), identified by (indentificado por - senha do usu√°rio), password (senha)
+# op√ß√£o do comando FLUSH: flush (atualizar), privileges (recarregar as permiss√µes)
 DATABASE="CREATE DATABASE wordpress;"
 USERDATABASE="CREATE USER 'wordpress' IDENTIFIED BY 'wordpress';"
 GRANTDATABASE="GRANT USAGE ON *.* TO 'wordpress' IDENTIFIED BY 'wordpress';"
 GRANTALL="GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress';"
 FLUSH="FLUSH PRIVILEGES;"
 #
-# Verificando se o usu·rio e Root, DistribuiÁ„o e >=18.04 e o Kernel >=4.15 <IF MELHORADO)
-# [ ] = teste de express„o, && = operador lÛgico AND, == comparaÁ„o de string, exit 1 = A maioria dos erros comuns na execuÁ„o
+# Verificando se o usu√°rio e Root, Distribui√ß√£o e >=18.04 e o Kernel >=4.15 <IF MELHORADO)
+# [ ] = teste de express√£o, && = operador l√≥gico AND, == compara√ß√£o de string, exit 1 = A maioria dos erros comuns na execu√ß√£o
 clear
 if [ "$USUARIO" == "0" ] && [ "$UBUNTU" == "18.04" ] && [ "$KERNEL" == "4.15" ]
 	then
-		echo -e "O usu·rio e Root, continuando com o script..."
-		echo -e "DistribuiÁ„o e >=18.04.x, continuando com o script..."
+		echo -e "O usu√°rio e Root, continuando com o script..."
+		echo -e "Distribui√ß√£o e >=18.04.x, continuando com o script..."
 		echo -e "Kernel e >= 4.15, continuando com o script..."
 		sleep 5
 	else
-		echo -e "Usu·rio n„o e Root ($USUARIO) ou DistribuiÁ„o n„o e >=18.04.x ($UBUNTU) ou Kernel n„o e >=4.15 ($KERNEL)"
-		echo -e "Caso vocÍ n„o tenha executado o script com o comando: sudo -i"
+		echo -e "Usu√°rio n√£o e Root ($USUARIO) ou Distribui√ß√£o n√£o e >=18.04.x ($UBUNTU) ou Kernel n√£o e >=4.15 ($KERNEL)"
+		echo -e "Caso voc√™ n√£o tenha executado o script com o comando: sudo -i"
 		echo -e "Execute novamente o script para verificar o ambiente."
 		exit 1
 fi
 #
-# Verificando se as dependÍncais do Wordpress est„o instaladas
-# opÁ„o do dpkg: -s (status), opÁ„o do echo: -e (intepretador de escapes de barra invertida), -n (permite nova linha)
-# || (operador lÛgico OU), 2> (redirecionar de saÌda de erro STDERR), && = operador lÛgico AND, { } = agrupa comandos em blocos
-# [ ] = testa uma express„o, retornando 0 ou 1, -ne = È diferente (NotEqual)
-echo -n "Verificando as dependÍncias, aguarde... "
+# Verificando se as depend√™ncais do Wordpress est√£o instaladas
+# op√ß√£o do dpkg: -s (status), op√ß√£o do echo: -e (intepretador de escapes de barra invertida), -n (permite nova linha)
+# || (operador l√≥gico OU), 2> (redirecionar de sa√≠da de erro STDERR), && = operador l√≥gico AND, { } = agrupa comandos em blocos
+# [ ] = testa uma express√£o, retornando 0 ou 1, -ne = √© diferente (NotEqual)
+echo -n "Verificando as depend√™ncias, aguarde... "
 	for name in mysql-server mysql-common apache2
 	do
   		[[ $(dpkg -s $name 2> /dev/null) ]] || { echo -en "\n\nO software: $name precisa ser instalado. \nUse o comando 'apt install $name'\n";deps=1; }
 	done
-		[[ $deps -ne 1 ]] && echo "DependÍncias.: OK" || { echo -en "\nInstale as dependÍncias acima e execute novamente este script\n";exit 1; }
+		[[ $deps -ne 1 ]] && echo "Depend√™ncias.: OK" || { echo -en "\nInstale as depend√™ncias acima e execute novamente este script\n";exit 1; }
 		sleep 5
 #
-# Script de instalaÁ„o do Wordpress no GNU/Linux Ubuntu Server 18.04.x
-# opÁ„o do comando echo: -e (enable) habilita interpretador, \n = (new line)
-# opÁ„o do comando hostname: -I (all IP address)
-# opÁ„o do comando sleep: 5 (seconds
-# opÁ„o do comando date: + (format), %d (day), %m (month), %Y (year 1970), %H (hour 24), %M (minute 60)
-echo -e "InÌcio do script $0 em: `date +%d/%m/%Y-"("%H:%M")"`\n" &>> $LOG
+# Script de instala√ß√£o do Wordpress no GNU/Linux Ubuntu Server 18.04.x
+# op√ß√£o do comando echo: -e (enable) habilita interpretador, \n = (new line)
+# op√ß√£o do comando hostname: -I (all IP address)
+# op√ß√£o do comando sleep: 5 (seconds
+# op√ß√£o do comando date: + (format), %d (day), %m (month), %Y (year 1970), %H (hour 24), %M (minute 60)
+echo -e "In√≠cio do script $0 em: `date +%d/%m/%Y-"("%H:%M")"`\n" &>> $LOG
 clear
 #
-echo -e "InstalaÁ„o do Wordpress no GNU/Linux Ubuntu Server 18.04.x\n"
-echo -e "ApÛs a instalaÁ„o do Wordpress acessar a URL: http://`hostname -I`/wp/\n"
+echo -e "Instala√ß√£o do Wordpress no GNU/Linux Ubuntu Server 18.04.x\n"
+echo -e "Ap√≥s a instala√ß√£o do Wordpress acessar a URL: http://`hostname -I`/wp/\n"
 echo -e "Aguarde, esse processo demora um pouco dependendo do seu Link de Internet..."
 sleep 5
 echo
 #
 echo -e "Atualizando as listas do Apt, aguarde..."
-	# opÁ„o do comando: &>> (redirecionar a saÌda padr„o)
+	# op√ß√£o do comando: &>> (redirecionar a sa√≠da padr√£o)
 	apt update &>> $LOG
 echo -e "Listas atualizadas com sucesso!!!, continuando com o script..."
 sleep 5
 echo
 #
 echo -e "Atualizando o sistema, aguarde..."
-	# opÁ„o do comando: &>> (redirecionar a saÌda padr„o)
-	# opÁ„o do comando apt: -y (yes)
+	# op√ß√£o do comando: &>> (redirecionar a sa√≠da padr√£o)
+	# op√ß√£o do comando apt: -y (yes)
 	apt -y upgrade &>> $LOG
 echo -e "Sistema atualizado com sucesso!!!, continuando com o script..."
 sleep 5
 echo
 #
-echo -e "Instalando as dependÍncias do Wordpress, aguarde..."
-	# opÁ„o do comando: &>> (redirecionar a saÌda padr„o)
-	# opÁ„o do comando apt: -y (yes)
+echo -e "Instalando as depend√™ncias do Wordpress, aguarde..."
+	# op√ß√£o do comando: &>> (redirecionar a sa√≠da padr√£o)
+	# op√ß√£o do comando apt: -y (yes)
 	apt -y install unzip &>> $LOG
-echo -e "DependÍncias instaladas com sucesso!!!, continuando com o script"
+echo -e "Depend√™ncias instaladas com sucesso!!!, continuando com o script"
 sleep 5
 echo
 #
-echo -e "Removendo os software desnecess·rios, aguarde..."
-	# opÁ„o do comando: &>> (redirecionar a saÌda padr„o)
-	# opÁ„o do comando apt: -y (yes)
+echo -e "Removendo os software desnecess√°rios, aguarde..."
+	# op√ß√£o do comando: &>> (redirecionar a sa√≠da padr√£o)
+	# op√ß√£o do comando apt: -y (yes)
 	apt -y autoremove &>> $LOG
 echo -e "Software removidos com Sucesso!!!, continuando com o script..."
 sleep 5
@@ -136,23 +136,23 @@ echo -e "Instalando o Wordpress, aguarde..."
 echo
 #
 echo -e "Baixando o Wordpress do site oficial, aguarde..."
-	# opÁ„o do comando: &>> (redirecionar a saÌda padr„o)
+	# op√ß√£o do comando: &>> (redirecionar a sa√≠da padr√£o)
 	wget $WORDPRESS &>> $LOG
 echo -e "Wordpress baixado com sucesso!!!, continuando com o script..."
 sleep 5
 echo
 #
 echo -e "Descompactando o Wordpress, aguarde..."
-	# opÁ„o do comando: &>> (redirecionar a saÌda padr„o)
+	# op√ß√£o do comando: &>> (redirecionar a sa√≠da padr√£o)
 	unzip latest.zip &>> $LOG
-echo -e "DescompactaÁ„o feita com sucesso!!!, continuando com o script..."
+echo -e "Descompacta√ß√£o feita com sucesso!!!, continuando com o script..."
 sleep 5
 echo
 #
-echo -e "Copiando os arquivos de configuraÁ„o do Wordpress, aguarde..."
-	# opÁ„o do comando: &>> (redirecionar a saÌda padr„o)
-	# opÁ„o do comando mv: -v (verbose)
-	# opÁ„o do comando cp: -v (verbose)
+echo -e "Copiando os arquivos de configura√ß√£o do Wordpress, aguarde..."
+	# op√ß√£o do comando: &>> (redirecionar a sa√≠da padr√£o)
+	# op√ß√£o do comando mv: -v (verbose)
+	# op√ß√£o do comando cp: -v (verbose)
 	mv -v wordpress/ /var/www/html/wp &>> $LOG
 	cp -v conf/htaccess /var/www/html/wp/.htaccess &>> $LOG
 	cp -v conf/wp-config.php /var/www/html/wp/ &>> $LOG
@@ -160,19 +160,19 @@ echo -e "Arquivos copiados com sucesso!!!, continuando com o script..."
 sleep 5
 echo
 #				 
-echo -e "Alterando as permissıes dos arquivos e diretÛrios do Wordpress, aguarde..."
-	# opÁ„o do comando: &>> (redirecionar a saÌda padr„o)
-	# opÁ„o do comando chmod: -R (recursive), -f (silent), -v (verbose), 755 (Dono=RWX,Grupo=R-X,Outros=R-X)
-	# opÁ„o do comando chown: -R (recursive), -f (silent), -v (verbose), dono.grupo (alteraÁaı do dono e grupo)
+echo -e "Alterando as permiss√µes dos arquivos e diret√≥rios do Wordpress, aguarde..."
+	# op√ß√£o do comando: &>> (redirecionar a sa√≠da padr√£o)
+	# op√ß√£o do comando chmod: -R (recursive), -f (silent), -v (verbose), 755 (Dono=RWX,Grupo=R-X,Outros=R-X)
+	# op√ß√£o do comando chown: -R (recursive), -f (silent), -v (verbose), dono.grupo (altera√ßa√µ do dono e grupo)
 	chmod -Rfv 755 /var/www/html/wp/ &>> $LOG
 	chown -Rfv www-data.www-data /var/www/html/wp/ &>> $LOG
-echo -e "Permissıes alteradas com sucesso!!!, continuando com o script..."
+echo -e "Permiss√µes alteradas com sucesso!!!, continuando com o script..."
 sleep 5
 echo
 #
 echo -e "Criando a Base de Dados do Wordpress, aguarde..."
-	# opÁ„o do comando: &>> (redirecionar a saÌda padr„o)
-	# opÁ„o do comando mysql: -u (user), -p (password) -e (execute)
+	# op√ß√£o do comando: &>> (redirecionar a sa√≠da padr√£o)
+	# op√ß√£o do comando mysql: -u (user), -p (password) -e (execute)
 	mysql -u $USER -p$PASSWORD -e "$DATABASE" mysql &>> $LOG
 	mysql -u $USER -p$PASSWORD -e "$USERDATABASE" mysql &>> $LOG
 	mysql -u $USER -p$PASSWORD -e "$GRANTDATABASE" mysql &>> $LOG
@@ -182,14 +182,14 @@ echo -e "Base de Dados criada com sucesso!!!, continuando com o script..."
 sleep 5
 echo
 #
-echo -e "InstalaÁ„o do Wordpress feita com sucesso!!! Pressione <Enter> para continuar."
+echo -e "Instala√ß√£o do Wordpress feita com sucesso!!! Pressione <Enter> para continuar."
 read
 sleep 3
 clear
 #
-echo -e "Editando o arquivo de configuraÁ„o da Base de Dados do Wordpress, aguarde..."
+echo -e "Editando o arquivo de configura√ß√£o da Base de Dados do Wordpress, aguarde..."
 	echo -e "Pressione <Enter> para editar o arquivo: wp-config.php"
-		# opÁ„o do comando sleep: 3 (seconds)
+		# op√ß√£o do comando sleep: 3 (seconds)
 		read
 		sleep 3
 	vim /var/www/html/wp/wp-config.php
@@ -197,9 +197,9 @@ echo -e "Arquivo editado com sucesso!!!, continuando com o script..."
 sleep 5
 echo
 #
-echo -e "Editando o arquivo de configuraÁ„o do htaccess do Wordpress, aguarde..."
+echo -e "Editando o arquivo de configura√ß√£o do htaccess do Wordpress, aguarde..."
 	echo -e "Pressione <Enter> para editar o arquivo: .htaccess"
-		# opÁ„o do comando sleep: 3 (seconds)
+		# op√ß√£o do comando sleep: 3 (seconds)
 		read
 		sleep 3
 	vim /var/www/html/wp/.htaccess
@@ -207,19 +207,19 @@ echo -e "Arquivo editado com sucesso!!!, continuando com o script..."
 sleep 5
 echo
 #
-echo -e "InstalaÁ„o do Wordpress feito com Sucesso!!!"
+echo -e "Instala√ß√£o do Wordpress feito com Sucesso!!!"
 	# script para calcular o tempo gasto (SCRIPT MELHORADO, CORRIGIDO FALHA DE HORA:MINUTO:SEGUNDOS)
-	# opÁ„o do comando date: +%T (Time)
+	# op√ß√£o do comando date: +%T (Time)
 	HORAFINAL=`date +%T`
-	# opÁ„o do comando date: -u (utc), -d (date), +%s (second since 1970)
+	# op√ß√£o do comando date: -u (utc), -d (date), +%s (second since 1970)
 	HORAINICIAL01=$(date -u -d "$HORAINICIAL" +"%s")
 	HORAFINAL01=$(date -u -d "$HORAFINAL" +"%s")
-	# opÁ„o do comando date: -u (utc), -d (date), 0 (string command), sec (force second), +%H (hour), %M (minute), %S (second), 
+	# op√ß√£o do comando date: -u (utc), -d (date), 0 (string command), sec (force second), +%H (hour), %M (minute), %S (second), 
 	TEMPO=`date -u -d "0 $HORAFINAL01 sec - $HORAINICIAL01 sec" +"%H:%M:%S"`
-	# $0 (vari·vel de ambiente do nome do comando)
-	echo -e "Tempo gasto para execuÁ„o do script $0: $TEMPO"
+	# $0 (vari√°vel de ambiente do nome do comando)
+	echo -e "Tempo gasto para execu√ß√£o do script $0: $TEMPO"
 echo -e "Pressione <Enter> para concluir o processo."
-# opÁ„o do comando date: + (format), %d (day), %m (month), %Y (year 1970), %H (hour 24), %M (minute 60)
+# op√ß√£o do comando date: + (format), %d (day), %m (month), %Y (year 1970), %H (hour 24), %M (minute 60)
 echo -e "Fim do script $0 em: `date +%d/%m/%Y-"("%H:%M")"`\n" &>> $LOG
 read
 exit 1
